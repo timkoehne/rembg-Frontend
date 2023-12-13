@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <style>
+    img {
+      width: 400px;
+      height: 400px;
+      object-fit: contain;
+    }
+
+    
+  </style>
+
+  <script>
+    const url = window.location.toString();
+    var image_num = parseInt(url.substring(url.lastIndexOf("/") + 1));
+
+    function loadNextImage(new_image_num) {
+      const new_url = url.substring(0, url.lastIndexOf("/")) + "/" + new_image_num;
+      window.location = new_url;
+    }
+
+    function removeBackground() {
+      fetch("/remove_background/" + image_num).then(response => {
+        return response.json()
+      }).then(data => {
+        console.log("data:image/png;base64," + data["content"])
+        document.getElementById("img_without_background").src = "data:image/png;base64, " + data["content"]
+        document.getElementById("download").download = data["filename"]
+        document.getElementById("download").href = "data:image/png;base64, " + data["content"]
+      })
+    }
+
+    function downloadMultiple() {
+      fetch("/download_multiple", {
+        method: "POST",
+        body: JSON.stringify({
+          ids: to_download
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      });
+    }
+
+
+    let to_download = JSON.parse(localStorage.getItem("to_download"));
+    if (to_download == null) {
+      to_download = []
+    }
+    function add_to_download(number) {
+      if (to_download == null) {
+        to_download = []
+      }
+      to_download.push(number)
+      localStorage.setItem("to_download", JSON.stringify(to_download));
+    }
+
+
+  </script>
+  <title>Hello from Flask</title>
+</head>
+
+<body>
+  <form enctype="multipart/form-data" action="/upload/" method="post">
+    <label for="filechooser">File</label>
+    <input id="filechooser" name="file" type="file" multiple />
+    <button>Upload</button>
+  </form>
+  <div>
+    <img id="img" width=400 height=400 src="{{ image }}">
+    <img id="img_without_background" width=400 height=400 src="{{ image_without_background }}">
+    <button onclick="removeBackground()">Remove Background</button>
+    <a id="download">Download</a>
+
+  </div>
+
+
+
+  <div>
+    <button onclick="loadNextImage(image_num-1)">Previous Image</button>
+    <button onclick="loadNextImage(image_num+1)">Next Image</button>
+    <button onclick="add_to_download(image_num)">Select</button>
+    <button onclick="console.log(to_download)">Show Selected</button>
+    <button onclick="downloadMultiple()">Remove Background from Selected</button>
+  </div>
+
+</body>
+
+</html>

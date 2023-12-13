@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <title>Hello from Flask</title>
+
+
+  <script>
+    function removeBackground(butId) {
+      row = parseInt(butId.replace("but", ""))
+
+      fetch("/remove_background/" + row).then(response => {
+        return response.json()
+      }).then(data => {
+        document.getElementById("edited_img" + row).src = "data:image/png;base64, " + data["content"]
+        document.getElementById("a" + row).download = data["filename"]
+        document.getElementById("a" + row).href = "data:image/png;base64, " + data["content"]
+      })
+    }
+
+    function deleteRow(deleteNum, deletePath) {
+      document.getElementById("tr" + deleteNum).remove()
+
+      fetch("/delete_image", {
+        method: "POST",
+        body: JSON.stringify({
+          path: deletePath
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      });
+    }
+
+
+  </script>
+
+  <style>
+    img.preview {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+    }
+  </style>
+
+
+</head>
+
+<body>
+  <div>
+
+    <form enctype="multipart/form-data" action="/upload/" method="post">
+      <label for="filechooser">File</label>
+      <input id="filechooser" name="file" type="file" multiple />
+      <button>Upload</button>
+    </form>
+
+  </div>
+
+
+
+  <div>
+    <table>
+      <tbody>
+        {% for i in range(0, num_images) %}
+        <tr id="tr{{i}}">
+          <td> <input type="checkbox" id="accept" name="accept" value="no" /></td>
+          <td> <img id="unedited_img{{i}}" class="preview" src="{{ unedited_images[i] }}" /></td>
+          <td> <img id="edited_img{{i}}" class="preview edited" src="{{ edited_images[i] }}" /></td>
+          <td> {{ unedited_images[i] }} </td>
+          <td> <button id="but{{i}}" onclick="removeBackground(this.id)">Remove Background</button> </td>
+          <td> <a id="a{{i}}" {% if edited_images[i].endswith("png") %} href="{{ edited_images[i] }}" {% endif %}
+              download="test.png">Download</a></td>
+          <td> <button id="delete{{i}}" onclick="deleteRow({{i}}, '{{ unedited_images[i] }}' )"></a>Delete</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</body>
+
+</html>
