@@ -34,18 +34,6 @@
       })
     }
 
-    function downloadMultiple() {
-      fetch("/download_multiple", {
-        method: "POST",
-        body: JSON.stringify({
-          ids: to_download
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8"
-        }
-      });
-    }
-
 
     let to_download = JSON.parse(localStorage.getItem("to_download"));
     if (to_download == null) {

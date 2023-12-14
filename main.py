@@ -2,18 +2,14 @@ from base64 import b64encode
 import io
 import json
 import os
-from pathlib import Path
 from flask import (
     Flask,
-    Response,
     flash,
     redirect,
     render_template,
     request,
     send_from_directory,
-    url_for,
 )
-from itsdangerous import base64_decode, base64_encode
 from rembg import remove
 from PIL import Image
 
@@ -167,3 +163,8 @@ def upload_file():
                 filename = file.filename
                 file.save(upload_folder + filename)
         return redirect(request.referrer)
+
+
+#TODO show images big when clicked on
+#TODO show messages other than alert to report success
+#TODO make top stay at the top of the screen

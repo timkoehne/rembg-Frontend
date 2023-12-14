@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <script src="{{ url_for('static', filename='functions.js') }}"></script>
 
-
 </head>
 
 <body>
@@ -24,19 +23,32 @@
   </div>
 
 
+  <button onclick="removeMultipleBackgrounds()">Remove Background</button>
+  <button onclick="downloadMultiple()">Download</button>
+
   <div>
     <table>
+      <thead>
+        <th>
+          <input class="checkbox" id="select_all" type="checkbox" onchange="setAllCheckboxes(this.checked)"/>
+        <th>Original Image</th>
+        <th>Edited Image</th>
+        <th>Filename</th>
+      </thead>
       <tbody>
         {% for i in range(0, num_images) %}
         <tr id="tr{{i}}">
-          <td> <input type="checkbox" id="accept" name="accept" value="no" /></td>
+          <td> <input class="checkbox" id="checkbox{{i}}" type="checkbox" /></td>
           <td> <img id="unedited_img{{i}}" class="preview" src="{{ unedited_images[i] }}" /></td>
           <td> <img id="edited_img{{i}}" class="preview edited" src="{{ edited_images[i] }}" /></td>
-          <td> {{ unedited_images[i] }} </td>
-          <td> <button id="but{{i}}" onclick="removeBackground(this.id)">Remove Background</button> </td>
-          <td> <a id="a{{i}}" {% if edited_images[i].endswith("png") %} href="{{ edited_images[i] }}" {% endif %}
-              download="test.png">Download</a></td>
-          <td> <button id="delete{{i}}" onclick="deleteRow({{i}}, '{{ unedited_images[i] }}' )"></a>Delete</td>
+          <td>
+            <div id="filename{{i}}">{{ unedited_images[i].split("/")[3] }}</div>
+          </td>
+          <td> <button id="but{{i}}" class="hidden" onclick="removeBackground(this.id)">Remove Background</button> </td>
+          <td> <a id="a{{i}}" class="hidden" {% if edited_images[i].endswith("png") %} href="{{ edited_images[i] }}" {%
+              endif %} download="test.png">Download</a></td>
+          <td> <button id="delete{{i}}" class="hidden"
+              onclick="deleteRow({{i}}, '{{ unedited_images[i] }}' )"></a>Delete</td>
         </tr>
         {% endfor %}
       </tbody>
