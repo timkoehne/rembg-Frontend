@@ -168,3 +168,5 @@ def upload_file():
 #TODO show images big when clicked on
 #TODO show messages other than alert to report success
 #TODO make top stay at the top of the screen
+#TODO show progess
+#TODO auto refresh after upload or dynamically load entries

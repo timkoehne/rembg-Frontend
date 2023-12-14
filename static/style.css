@@ -1,9 +1,64 @@
 img.preview {
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
   object-fit: contain;
 }
 
-.hidden{
+.hidden {
   visibility: hidden;
+  position: absolute;
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+
+label.title {
+  position: absolute;
+  left: 20px;
+  font-size: xx-large;
+}
+
+.navbar>* {
+  margin: 20px;
+}
+
+.btn {
+  height: 50%;
+}
+
+.dropzone {
+  width: 600px;
+  height: 150px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.content>* {
+  margin: 20px;
+}
+
+.theader {
+  position: sticky;
+  top: 100px;
+}
+
+.main_background {
+  background-color: white;
+}
+
+.accent_background {
+  background-color: darkgray;
 }

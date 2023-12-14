@@ -26,8 +26,19 @@ function deleteRow(deleteNum, deletePath) {
 }
 
 
+async function deleteMultiple() {
+  checked_checkboxes = document.querySelectorAll(".checkbox.row:checked");
+
+  for (let i = 0; i < checked_checkboxes.length; i++) {
+    row = parseInt(checked_checkboxes[i].id.replace("checkbox", ""));
+    document.getElementById("delete" + row).click();
+  }
+}
+
+
 async function removeMultipleBackgrounds() {
-  checked_checkboxes = document.querySelectorAll(".checkbox:checked");
+  checked_checkboxes = document.querySelectorAll(".checkbox.row:checked");
+
   for (let i = 0; i < checked_checkboxes.length; i++) {
     row = parseInt(checked_checkboxes[i].id.replace("checkbox", ""));
     await removeBackground("but" + row);
@@ -37,7 +48,7 @@ async function removeMultipleBackgrounds() {
 }
 
 async function downloadMultiple() {
-  checked_checkboxes = document.querySelectorAll(".checkbox:checked");
+  checked_checkboxes = document.querySelectorAll(".checkbox.row:checked");
   for (let i = 0; i < checked_checkboxes.length; i++) {
     row = parseInt(checked_checkboxes[i].id.replace("checkbox", ""));
     document.getElementById("a" + row).click();
@@ -45,10 +56,18 @@ async function downloadMultiple() {
   alert("Finished downloading all selected images");
 }
 
-function setAllCheckboxes(value){
-  checkboxes = document.querySelectorAll(".checkbox");
+function setAllCheckboxes(value) {
+  checkboxes = document.querySelectorAll(".checkbox.row");
   console.log("Setting all checkboxes to " + value);
   for (let i = 0; i < checkboxes.length; i++) {
     checkboxes[i].checked = value;
   }
+  onCheckboxChange()
+}
+
+function onCheckboxChange(){
+  checked_checkboxes = document.querySelectorAll(".checkbox:checked");
+  document.getElementById("label_num_selected").textContent = checked_checkboxes.length + " Images selected"
+
+
 }

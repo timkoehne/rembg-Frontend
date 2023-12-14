@@ -3,58 +3,76 @@
 <html>
 
 <head>
-  <title>Hello from Flask</title>
+  <title>Rembg</title>
 
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
+  <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+
   <script src="{{ url_for('static', filename='functions.js') }}"></script>
 
 </head>
 
 <body>
 
-  <div>
 
-    <form enctype="multipart/form-data" action="/upload/" method="post">
+  <div class="navbar accent_background">
+    <label class="title">Rembg</label>
+    <label id="label_num_selected">0 Images selected</label>
+    <button class="btn btn-secondary" onclick="removeMultipleBackgrounds()">Remove Background</button>
+    <button class="btn btn-secondary" onclick="downloadMultiple()">Download</button>
+    <button class="btn btn-secondary" onclick="deleteMultiple()">Delete Image</button>
+  </div>
+
+  <div class="content">
+    <div>
+      <form action="/upload/" class="dropzone" id="my-awesome-dropzone"></form>
+    </div>
+
+
+
+    <!-- <form enctype="multipart/form-data" action="/upload/" method="post">
       <label for="filechooser">File</label>
       <input id="filechooser" name="file" type="file" multiple />
       <button>Upload</button>
-    </form>
-
-  </div>
+    </form> -->
 
 
-  <button onclick="removeMultipleBackgrounds()">Remove Background</button>
-  <button onclick="downloadMultiple()">Download</button>
 
-  <div>
     <table>
-      <thead>
-        <th>
-          <input class="checkbox" id="select_all" type="checkbox" onchange="setAllCheckboxes(this.checked)"/>
-        <th>Original Image</th>
-        <th>Edited Image</th>
-        <th>Filename</th>
+      <thead class="theader main_background">
+        <th class="theader">
+          <input class="checkbox form-check" id="select_all" type="checkbox"
+            onchange="setAllCheckboxes(this.checked)" />
+        <th class="theader">Filename</th>
+        <th class="theader">Original Image</th>
+        <th class="theader">Edited Image</th>
       </thead>
       <tbody>
         {% for i in range(0, num_images) %}
         <tr id="tr{{i}}">
-          <td> <input class="checkbox" id="checkbox{{i}}" type="checkbox" /></td>
-          <td> <img id="unedited_img{{i}}" class="preview" src="{{ unedited_images[i] }}" /></td>
-          <td> <img id="edited_img{{i}}" class="preview edited" src="{{ edited_images[i] }}" /></td>
+          <td> <input class="checkbox row" id="checkbox{{i}}" type="checkbox" onchange="onCheckboxChange()" /></td>
           <td>
             <div id="filename{{i}}">{{ unedited_images[i].split("/")[3] }}</div>
           </td>
-          <td> <button id="but{{i}}" class="hidden" onclick="removeBackground(this.id)">Remove Background</button> </td>
+          <td> <img id="unedited_img{{i}}" class="preview" src="{{ unedited_images[i] }}" /></td>
+          <td> <img id="edited_img{{i}}" class="preview edited" src="{{ edited_images[i] }}" /></td>
+
+          <td> <button id="but{{i}}" class="hidden" onclick="removeBackground(this.id)">Remove Background</button>
+          </td>
           <td> <a id="a{{i}}" class="hidden" {% if edited_images[i].endswith("png") %} href="{{ edited_images[i] }}" {%
               endif %} download="test.png">Download</a></td>
           <td> <button id="delete{{i}}" class="hidden"
-              onclick="deleteRow({{i}}, '{{ unedited_images[i] }}' )"></a>Delete</td>
+              onclick="deleteRow({{i}}, '{{ unedited_images[i] }}' )"></a>Delete
+          </td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 
+  </div>
 </body>
 
 </html>
