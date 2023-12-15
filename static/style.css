@@ -36,7 +36,7 @@ label.title {
 
 .dropzone {
   width: 600px;
-  height: 150px;
+  min-height: 150px;
 }
 
 .content {
@@ -61,4 +61,8 @@ label.title {
 
 .accent_background {
   background-color: darkgray;
+}
+
+.filename {
+  text-align: center;
 }

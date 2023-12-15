@@ -11,13 +11,14 @@ async function removeBackground(butId) {
   })
 }
 
-function deleteRow(deleteNum, deletePath) {
+function deleteRow(deleteNum) {
+  deleteFilename = document.getElementById("filename" + row).textContent
   document.getElementById("tr" + deleteNum).remove()
 
   fetch("/delete_image", {
     method: "POST",
     body: JSON.stringify({
-      path: deletePath
+      path: deleteFilename
     }),
     headers: {
       "Content-type": "application/json; charset=UTF-8"
@@ -65,9 +66,7 @@ function setAllCheckboxes(value) {
   onCheckboxChange()
 }
 
-function onCheckboxChange(){
+function onCheckboxChange() {
   checked_checkboxes = document.querySelectorAll(".checkbox:checked");
   document.getElementById("label_num_selected").textContent = checked_checkboxes.length + " Images selected"
-
-
 }

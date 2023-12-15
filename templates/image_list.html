@@ -27,7 +27,7 @@
 
   <div class="content">
     <div>
-      <form action="/upload/" class="dropzone" id="my-awesome-dropzone"></form>
+      <form action="/upload/" class="dropzone" id="dropzone"></form>
     </div>
 
 
@@ -54,7 +54,7 @@
         <tr id="tr{{i}}">
           <td> <input class="checkbox row" id="checkbox{{i}}" type="checkbox" onchange="onCheckboxChange()" /></td>
           <td>
-            <div id="filename{{i}}">{{ unedited_images[i].split("/")[3] }}</div>
+            <div class="filename" id="filename{{i}}">{{ unedited_images[i].split(separator)[2] }}</div>
           </td>
           <td> <img id="unedited_img{{i}}" class="preview" src="{{ unedited_images[i] }}" /></td>
           <td> <img id="edited_img{{i}}" class="preview edited" src="{{ edited_images[i] }}" /></td>
@@ -63,8 +63,7 @@
           </td>
           <td> <a id="a{{i}}" class="hidden" {% if edited_images[i].endswith("png") %} href="{{ edited_images[i] }}" {%
               endif %} download="test.png">Download</a></td>
-          <td> <button id="delete{{i}}" class="hidden"
-              onclick="deleteRow({{i}}, '{{ unedited_images[i] }}' )"></a>Delete
+          <td> <button id="delete{{i}}" class="hidden" onclick="deleteRow({{i}})"></a>Delete
           </td>
         </tr>
         {% endfor %}
@@ -73,6 +72,7 @@
   </div>
 
   </div>
+
 </body>
 
 </html>
