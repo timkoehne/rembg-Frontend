@@ -102,7 +102,6 @@ def remove_background(image_num):
 
     img_byte_arr = io.BytesIO()
     output.save(img_byte_arr, "png")  # type: ignore
-    print(img_byte_arr)
 
     content = b64encode(img_byte_arr.getvalue()).decode("utf-8")
     return json.dumps({"content": content, "filename": IMG_LIST[image_num]})
@@ -161,4 +160,3 @@ def upload_file():
 # TODO show images big when clicked on
 # TODO show messages other than alert to report success
 # TODO show progess
-# TODO auto refresh after upload or dynamically load entries

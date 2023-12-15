@@ -6,7 +6,6 @@
   <title>Rembg</title>
 
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
   <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
 
@@ -27,7 +26,7 @@
 
   <div class="content">
     <div>
-      <form action="/upload/" class="dropzone" id="dropzone"></form>
+      <form action="/upload/" class="dropzone" id="myDropzone"></form>
     </div>
 
 
@@ -73,6 +72,8 @@
 
   </div>
 
+
+  <script src="{{ url_for('static', filename='doAfterLoading.js') }}"></script>
 </body>
 
 </html>
