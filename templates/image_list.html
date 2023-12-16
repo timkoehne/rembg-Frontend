@@ -29,21 +29,46 @@
       <form action="/upload/" class="dropzone" id="myDropzone"></form>
     </div>
 
+    <div class="settings">
+      <div class="setting">
+        <label for="selectModel">Model: </label>
+        <select name="selectModel" id="selectModel">
+          <option value="u2net">u2net</option>
+          <option value="u2netp">u2netp</option>
+          <option value="u2net_human_seg">u2net_human_seg</option>
+          <option value="u2net_cloth_seg">u2net_cloth_seg</option>
+          <option value="silueta">silueta</option>
+          <option value="isnet-general-use" selected>isnet-general-use</option>
+          <option value="isnet-anime">isnet-anime</option>
+          <option value="sam">sam</option>
+        </select>
+      </div>
 
+      <div class="setting">
+        <label for="enableAlphaMatting">Enable Alpha Matting</label>
+        <input class="checkbox" id="enableAlphaMatting" type="checkbox" onchange="enableAlphaMatting(this.checked)" />
+      </div>
 
-    <!-- <form enctype="multipart/form-data" action="/upload/" method="post">
-      <label for="filechooser">File</label>
-      <input id="filechooser" name="file" type="file" multiple />
-      <button>Upload</button>
-    </form> -->
+      <div class="setting" id="settingAlphaMattingForeground">
+        <label for="alphaMattingForegroundThreshold">alphaMattingForegroundThreshold</label>
+        <input type="range" min="1" max="255" value="240" class="slider" id="alphaMattingForegroundThreshold"
+          onchange="updateForegroundThreshold(this.value)">
+        <label id="alphaMattingForegroundThresholdValue">240</label>
+      </div>
 
-
+      <div class="setting" id="settingAlphaMattingBackground">
+        <label for="alphaMattingBackgroundThreshold">alphaMattingBackgroundThreshold</label>
+        <input type="range" min="1" max="255" value="10" class="slider" id="alphaMattingBackgroundThreshold"
+          onchange="updateBackgroundThreshold(this.value)">
+        <label id="alphaMattingBackgroundThresholdValue">10</label>
+      </div>
+    </div>
 
     <table>
       <thead class="theader main_background">
         <th class="theader">
           <input class="checkbox form-check" id="select_all" type="checkbox"
-            onchange="setAllCheckboxes(this.checked)" />
+            onchange="setAllRowCheckboxes(this.checked)" />
         <th class="theader">Filename</th>
         <th class="theader">Original Image</th>
         <th class="theader">Edited Image</th>

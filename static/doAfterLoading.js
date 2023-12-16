@@ -5,3 +5,6 @@ Dropzone.options.myDropzone = {
       })
     }
   };
+
+
+enableAlphaMatting(false)

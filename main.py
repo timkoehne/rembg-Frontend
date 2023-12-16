@@ -12,6 +12,7 @@ from flask import (
 )
 from rembg import remove
 from PIL import Image
+from rembg.session_factory import new_session
 
 app = Flask(__name__)
 unedited_files_folder = "static/IMG/".split("/")
@@ -40,7 +41,7 @@ def test():
         else:
             edited_images.append("")
         print(image_name)
-        
+
     unedited_images = [os.path.join(*unedited_files_folder, i) for i in unedited_images]
     edited_images = [os.path.join(*edited_files_folder, i) for i in edited_images]
 
@@ -56,55 +57,55 @@ def test():
     )
 
 
-@app.route("/download_multiple", methods=["GET", "POST"])
-def download_multiple():
-    IMG_LIST = os.listdir(os.path.join(app.root_path, *unedited_files_folder))
-
+@app.route("/remove_background", methods=["GET", "POST"])
+def remove_background():
     if request.method == "POST":
-        if request.json and request.json["ids"]:
-            ids = request.json["ids"]
-            for id in ids:
-                file_type = IMG_LIST[id][IMG_LIST[id].index(".") + 1 :]
-                input_path = (
-                    os.path.join(app.root_path, *unedited_files_folder) + IMG_LIST[id]
-                )
-                if file_type != "png":
-                    IMG_LIST[id] = IMG_LIST[id].replace(file_type, "png")
-                output_path = (
-                    os.path.join(app.root_path, *edited_files_folder) + IMG_LIST[id]
-                )
-                input = Image.open(input_path)
-                output = remove(input)
-                output.save(output_path)  # type: ignore
+        if request.json:
+            request_content = request.json
+            print(request_content)
+
+            IMG_LIST = os.listdir(os.path.join(app.root_path, *unedited_files_folder))
+            input_path = os.path.join(
+                app.root_path, *unedited_files_folder, request_content["filename"]
+            )
+            output_filename = request_content["filename"]
+
+            file_type = request_content["filename"][
+                request_content["filename"].index(".") + 1 :
+            ]
+            if file_type != "png":
+                output_filename = request_content["filename"].replace(file_type, "png")
+            output_path = os.path.join(
+                app.root_path, *edited_files_folder, output_filename
+            )
+
+            print(f"input_path {input_path}")
+            print(f"output_path {output_path}")
+
+            image = Image.open(input_path)
+            image = remove(
+                image,
+                alpha_matting=request_content["enable_alpha_matting"],
+                alpha_matting_foreground_threshold=request_content[
+                    "alpha_matting_foreground_threshold"
+                ],
+                alpha_matting_background_threshold=request_content[
+                    "alpha_matting_background_threshold"
+                ],
+                session=new_session(request_content["model"]),
+            )
+
+            image.save(output_path)  # type: ignore
+
+            img_byte_arr = io.BytesIO()
+            image.save(img_byte_arr, "png")  # type: ignore
+
+            content = b64encode(img_byte_arr.getvalue()).decode("utf-8")
+            return json.dumps(
+                {"content": content, "filename": request_content["filename"]}
+            )
+
     return ""
-
-
-@app.route("/remove_background/<image_num>")
-def remove_background(image_num):
-    print("removing background")
-    image_num = int(image_num)
-    IMG_LIST = os.listdir(os.path.join(app.root_path, *unedited_files_folder))
-    input_path = os.path.join(app.root_path, *unedited_files_folder, IMG_LIST[image_num])
-    output_path = os.path.join(
-        app.root_path, *edited_files_folder, IMG_LIST[image_num]
-    )
-
-    input = Image.open(input_path)
-    output = remove(input)
-
-    file_type = IMG_LIST[image_num][IMG_LIST[image_num].index(".") + 1 :]
-    input_path = os.path.join(app.root_path, *unedited_files_folder, IMG_LIST[image_num])
-    output_filename = output_path
-    if file_type != "png":
-        output_filename = output_path.replace(file_type, "png")
-    print(f"saving to {output_filename}")
-    output.save(output_filename)  # type: ignore
-
-    img_byte_arr = io.BytesIO()
-    output.save(img_byte_arr, "png")  # type: ignore
-
-    content = b64encode(img_byte_arr.getvalue()).decode("utf-8")
-    return json.dumps({"content": content, "filename": IMG_LIST[image_num]})
 
 
 @app.route("/delete_image/", methods=["GET", "POST"])
@@ -120,7 +121,9 @@ def delete_image():
             IMG_LIST = os.listdir(os.path.join(app.root_path, *unedited_files_folder))
             if filename in IMG_LIST:
                 print("is in img")
-                full_path = os.path.join(app.root_path, *unedited_files_folder, filename)
+                full_path = os.path.join(
+                    app.root_path, *unedited_files_folder, filename
+                )
                 print(f"deleting {full_path}")
                 os.remove(full_path)
 
@@ -128,9 +131,7 @@ def delete_image():
             filename = filename.replace(filetype, ".png")
             if filename in IMG_LIST:
                 print("is in without_background")
-                full_path = os.path.join(
-                    app.root_path, *edited_files_folder, filename
-                )
+                full_path = os.path.join(app.root_path, *edited_files_folder, filename)
                 print(f"deleting {full_path}")
                 os.remove(full_path)
     return ""

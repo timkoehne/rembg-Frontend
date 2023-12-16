@@ -1,15 +1,27 @@
-
 async function removeBackground(butId) {
   row = parseInt(butId.replace("but", ""))
+  deleteFilename = document.getElementById("filename" + row).textContent
 
-  await fetch("/remove_background/" + row).then(response => {
+  await fetch("/remove_background", {
+    method: "POST",
+    body: JSON.stringify({
+      "filename": deleteFilename,
+      "enable_alpha_matting": document.getElementById("enableAlphaMatting").checked,
+      "alpha_matting_foreground_threshold": parseInt(document.getElementById("alphaMattingForegroundThreshold").value),
+      "alpha_matting_background_threshold": parseInt(document.getElementById("alphaMattingBackgroundThreshold").value),
+      "model": document.getElementById("selectModel").value
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8"
+    }
+  }).then(response => {
     return response.json()
   }).then(data => {
     document.getElementById("edited_img" + row).src = "data:image/png;base64, " + data["content"]
     document.getElementById("a" + row).download = data["filename"]
     document.getElementById("a" + row).href = "data:image/png;base64, " + data["content"]
   })
-}
+};
 
 function deleteRow(deleteNum) {
   deleteFilename = document.getElementById("filename" + row).textContent
@@ -25,7 +37,6 @@ function deleteRow(deleteNum) {
     }
   });
 }
-
 
 async function deleteMultiple() {
   checked_checkboxes = document.querySelectorAll(".checkbox.row:checked");
@@ -57,7 +68,7 @@ async function downloadMultiple() {
   alert("Finished downloading all selected images");
 }
 
-function setAllCheckboxes(value) {
+function setAllRowCheckboxes(value) {
   checkboxes = document.querySelectorAll(".checkbox.row");
   console.log("Setting all checkboxes to " + value);
   for (let i = 0; i < checkboxes.length; i++) {
@@ -67,6 +78,24 @@ function setAllCheckboxes(value) {
 }
 
 function onCheckboxChange() {
-  checked_checkboxes = document.querySelectorAll(".checkbox:checked");
+  checked_checkboxes = document.querySelectorAll(".checkbox.row:checked");
   document.getElementById("label_num_selected").textContent = checked_checkboxes.length + " Images selected"
+}
+
+function updateForegroundThreshold(val) {
+  document.getElementById('alphaMattingForegroundThresholdValue').textContent = val;
+}
+function updateBackgroundThreshold(val) {
+  document.getElementById('alphaMattingBackgroundThresholdValue').textContent = val;
+}
+
+function enableAlphaMatting(val) {
+  if (val) {
+    document.getElementById('settingAlphaMattingForeground').classList.remove("hidden");
+    document.getElementById('settingAlphaMattingBackground').classList.remove("hidden");
+  } else {
+    document.getElementById('settingAlphaMattingForeground').classList.add("hidden");
+    document.getElementById('settingAlphaMattingBackground').classList.add("hidden");
+  }
+
 }

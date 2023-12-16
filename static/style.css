@@ -66,3 +66,13 @@ label.title {
 .filename {
   text-align: center;
 }
+
+.setting {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.setting>* {
+  margin: 10px;
+}
