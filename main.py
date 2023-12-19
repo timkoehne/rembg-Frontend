@@ -92,6 +92,9 @@ def remove_background():
                 alpha_matting_background_threshold=request_content[
                     "alpha_matting_background_threshold"
                 ],
+                alpha_matting_erode_size=request_content[
+                    "alpha_matting_erode"
+                ],
                 session=new_session(request_content["model"]),
             )
 

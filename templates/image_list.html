@@ -35,10 +35,10 @@
         <select name="selectModel" id="selectModel">
           <option value="u2net">u2net</option>
           <option value="u2netp">u2netp</option>
-          <option value="u2net_human_seg">u2net_human_seg</option>
+          <option value="u2net_human_seg" selected>u2net_human_seg</option>
           <option value="u2net_cloth_seg">u2net_cloth_seg</option>
           <option value="silueta">silueta</option>
-          <option value="isnet-general-use" selected>isnet-general-use</option>
+          <option value="isnet-general-use">isnet-general-use</option>
           <option value="isnet-anime">isnet-anime</option>
           <option value="sam">sam</option>
         </select>
@@ -46,21 +46,27 @@
 
       <div class="setting">
         <label for="enableAlphaMatting">Enable Alpha Matting</label>
-        <input class="checkbox" id="enableAlphaMatting" type="checkbox" onchange="enableAlphaMatting(this.checked)" />
+        <input class="checkbox" id="enableAlphaMatting" type="checkbox" onchange="enableAlphaMatting(this.checked)" checked/>
       </div>
 
       <div class="setting" id="settingAlphaMattingForeground">
         <label for="alphaMattingForegroundThreshold">alphaMattingForegroundThreshold</label>
-        <input type="range" min="1" max="255" value="240" class="slider" id="alphaMattingForegroundThreshold"
+        <input type="range" min=0 max=255 value=240 class="slider" id="alphaMattingForegroundThreshold"
           onchange="updateForegroundThreshold(this.value)">
         <label id="alphaMattingForegroundThresholdValue">240</label>
       </div>
 
       <div class="setting" id="settingAlphaMattingBackground">
         <label for="alphaMattingBackgroundThreshold">alphaMattingBackgroundThreshold</label>
-        <input type="range" min="1" max="255" value="10" class="slider" id="alphaMattingBackgroundThreshold"
+        <input type="range" min=0 max=255 value=160 class="slider" id="alphaMattingBackgroundThreshold"
           onchange="updateBackgroundThreshold(this.value)">
-        <label id="alphaMattingBackgroundThresholdValue">10</label>
+        <label id="alphaMattingBackgroundThresholdValue">160</label>
+      </div>
+      <div class="setting" id="settingAlphaMattingErode">
+        <label for="alphaMattingErode">alphaMattingErode</label>
+        <input type="range" min=0 max=20 value=10 class="slider" id="alphaMattingErode"
+          onchange="updateErode(this.value)">
+        <label id="alphaMattingErodeValue">10</label>
       </div>
     </div>
 

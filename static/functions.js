@@ -9,6 +9,7 @@ async function removeBackground(butId) {
       "enable_alpha_matting": document.getElementById("enableAlphaMatting").checked,
       "alpha_matting_foreground_threshold": parseInt(document.getElementById("alphaMattingForegroundThreshold").value),
       "alpha_matting_background_threshold": parseInt(document.getElementById("alphaMattingBackgroundThreshold").value),
+      "alpha_matting_erode": parseInt(document.getElementById("alphaMattingErode").value),
       "model": document.getElementById("selectModel").value
     }),
     headers: {
@@ -88,14 +89,19 @@ function updateForegroundThreshold(val) {
 function updateBackgroundThreshold(val) {
   document.getElementById('alphaMattingBackgroundThresholdValue').textContent = val;
 }
+function updateErode(val) {
+  document.getElementById('alphaMattingErodeValue').textContent = val;
+}
 
 function enableAlphaMatting(val) {
   if (val) {
     document.getElementById('settingAlphaMattingForeground').classList.remove("hidden");
     document.getElementById('settingAlphaMattingBackground').classList.remove("hidden");
+    document.getElementById('settingAlphaMattingErode').classList.remove("hidden");
   } else {
     document.getElementById('settingAlphaMattingForeground').classList.add("hidden");
     document.getElementById('settingAlphaMattingBackground').classList.add("hidden");
+    document.getElementById('settingAlphaMattingErode').classList.add("hidden");
   }
 
 }
